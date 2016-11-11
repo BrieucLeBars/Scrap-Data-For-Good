@@ -10,6 +10,7 @@ import os
 from pyvirtualdisplay import Display
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 def issue_driver_query(query_URL, query_params=None):
     """Issue the initial query in order to start scraping.
@@ -42,8 +43,9 @@ def issue_driver_query(query_URL, query_params=None):
     if os.environ['USER'] == 'ubuntu': 
         display = Display(visible=0, size=(800, 600))
         display.start()
-    
-    driver = webdriver.Firefox()
+
+
+    driver = webdriver.Chrome()
     # Wait long enough for page rendering before searching for an element. 
     driver.implicitly_wait(10)
     driver.get(query_URL)
@@ -53,7 +55,7 @@ def issue_driver_query(query_URL, query_params=None):
     # is not built for it. Here, keep issuing the query to get the non-beta version. 
     while 'beta' in driver.current_url: 
         driver.close()
-        driver = webdriver.Firefox()
+        driver = webdriver.Chrome()
         driver.implicitly_wait(10)
         driver.get(query_URL)
 
