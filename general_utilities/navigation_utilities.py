@@ -45,7 +45,7 @@ def issue_driver_query(query_URL, query_params=None):
         display.start()
 
 
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome('/usr/local/lib/python2.7/dist-packages/selenium/webdriver/chrome/chromedriver')
     # Wait long enough for page rendering before searching for an element. 
     driver.implicitly_wait(10)
     driver.get(query_URL)

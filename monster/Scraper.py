@@ -209,7 +209,6 @@ if __name__ == '__main__':
         radius = sys.argv[3]
     except IndexError:
         raise Exception('Program needs a job title, job location, and radius inputted!')
-
     base_URL = 'http://monster.fr/emploi/recherche/?'
     query_parameters = ['q={}'.format('-'.join(job_title.split())),
                         '&where={}'.format('-'.join(job_location.split())), '&sort=dt.rv.di',
@@ -230,10 +229,6 @@ if __name__ == '__main__':
     storage_dct = {"Site d'offre d'emploi": 'monster', 'num_jobs': num_jobs,
                    'Date de recherche': current_date, 'Recherche': job_title, 'Ville': job_location}
 
-    with open('test1.txt', "w") as f:
-        json.dump(storage_dct, f)
-
-
     is_next = True
     while is_next:
         scrape_job_page(driver, job_title, job_location)
@@ -241,4 +236,4 @@ if __name__ == '__main__':
     driver.close()
     storage_dct['jobs'] = job_list
     with open('test2.json', 'w') as data_file:
-        json.dump(storage_dct, data_file, ensure_ascii = True, encoding="utf-8")
+        json.dump(storage_dct, data_file)
