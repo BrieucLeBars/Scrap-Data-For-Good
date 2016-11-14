@@ -60,10 +60,9 @@ def scrape_job_page(driver, job_title, job_location):
     for title, location, company, date, thread in \
             zip(titles, locations, companies, dates, thread_lst):
         date_txt = Cleaner.date_exacte(date.text)
-        small_dict = gen_small_output(title, location, company, date_txt, thread)
+
         try:
-            mongo_dct = gen_output(json_dct.copy(), title, location,
-                                   company, date_txt, thread)
+            small_dict = gen_small_output(title, location, company, date_txt, thread)
         except:
             print('Missed element in Monster!')
 
@@ -99,33 +98,6 @@ def query_for_data(driver):
     return job_titles, job_locations, posting_companies, dates, hrefs
 
 
-def gen_output(json_dct, title, location, company, date, thread):
-    """Format the output dictionary that will end up going into Mongo.
-
-    Args:
-    ----
-        json_dct: dict
-        title: Selenium WebElement
-        location: Selenium WebElement
-        company: Selenium WebElement
-        date: Selenium WebElement
-        thread: RequestThreadInfo object
-
-    Return:
-    ------
-        json_dct: dct
-    """
-
-    thread.join()
-
-    json_dct['job_title'] = title.text
-    json_dct['location'] = location.text
-    json_dct['company'] = company.text
-    json_dct['date'] = date
-    json_dct['posting_txt'] = thread.posting_txt
-
-    return json_dct
-
 
 def gen_small_output(title, location, company, date, thread):
     """Format the output dictionary .
@@ -147,9 +119,25 @@ def gen_small_output(title, location, company, date, thread):
     thread.join()
     new_json = {}
     new_json['Nom du Poste'] = title.text
-    new_json['Lieu'] = location.text
     new_json['Entreprise'] = company.text
     new_json['Date Publication'] = date
+    try:
+        lieu = Cleaner.arrondissement_paris(location.text, thread.posting_txt)
+        new_json['Lieu'] = lieu
+    except:
+        pass
+
+    try:
+        salaire, contrat = Cleaner.parser(thread.posting_txt)
+        new_json['Salaire'] = salaire
+        new_json['Type de Contrat'] = contrat
+    except:
+        pass
+
+    try:
+        new_json['Tags'] = Cleaner.tags(thread.posting_txt)
+    except:
+        pass
 
     return new_json
 

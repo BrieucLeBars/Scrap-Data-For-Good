@@ -21,13 +21,37 @@ def date_exacte(date_txt):
 def arrondissement_paris(location, posting_txt):
    if re.search(r'Paris', location):
        #chercher code postale dans posting_txt
-
-        return location
+       try:
+           arrondissement = re.search(r'Paris 750([0-9][0-9])', posting_txt.lower()).group(1)
+           lieu = 'Paris ' + arrondissement
+           return lieu
+       except:
+           return 'Paris'
    else:
        return location
 
+def parser(posting_txt):
+    try:
+        salaire = re.search(r'salaire \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+    except:
+        salaire = None
+        pass
+    try:
+        contrat = re.search(r'type de contrat \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+    except:
+        contrat = None
+        pass
+    return salaire, contrat
 
-if __name__ == '__main__':
-    print(date_exacte("Publiée aujourd'hui"))
+def tags(posting_txt):
+    liste_tag = ['python', 'java,', 'java ', 'javascript', 'front-end', 'back-end', 'angular', 'node',
+                 'mongodb', 'sql', 'backbone', 'express', 'jee', 'j2ee', 'api rest', 'webservice rest',
+                 'react']
+    liste_competence = []
+    for tag in liste_tag:
+        try:
+            liste_competence.append(re.search(tag, posting_txt.lower()).group(0))
+        except:
+            pass
+    return liste_competence
 
-    print(date_exacte("il y a 6 jours"))

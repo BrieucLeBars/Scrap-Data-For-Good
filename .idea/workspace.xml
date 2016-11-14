@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="be550bc9-324b-4ba5-b1a6-d5b538ae20a5" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/monster/Cleaner.py" afterPath="$PROJECT_DIR$/monster/Cleaner.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/monster/Scraper.py" afterPath="$PROJECT_DIR$/monster/Scraper.py" />
     </list>
@@ -34,10 +33,10 @@
       <file leaf-file-name="Cleaner.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/monster/Cleaner.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="454">
-              <caret line="56" column="16" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
+            <state relative-caret-position="234">
+              <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
               <folding>
-                <element signature="e#24#39#0" expanded="true" />
+                <element signature="e#24#35#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -46,8 +45,8 @@
       <file leaf-file-name="Scraper.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/monster/Scraper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="523">
-              <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
+            <state relative-caret-position="32">
+              <caret line="125" column="31" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -83,10 +82,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="982" />
-    <option name="y" value="52" />
-    <option name="width" value="928" />
-    <option name="height" value="1028" />
+    <option name="x" value="971" />
+    <option name="y" value="83" />
+    <option name="width" value="918" />
+    <option name="height" value="970" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -437,8 +436,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="982" y="52" width="928" height="1028" extended-state="4" />
-    <editor active="false" />
+    <frame x="971" y="83" width="918" height="970" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15759636" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -448,7 +447,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.4931973" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32795697" sideWeight="0.48412699" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32903227" sideWeight="0.48526078" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35091743" sideWeight="0.48526078" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -501,7 +500,7 @@
         <state relative-caret-position="378">
           <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding>
-            <element signature="e#24#39#0" expanded="true" />
+            <element signature="e#24#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -535,7 +534,7 @@
         <state relative-caret-position="378">
           <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding>
-            <element signature="e#24#39#0" expanded="true" />
+            <element signature="e#24#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -569,7 +568,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="1" selection-start-line="0" selection-start-column="1" selection-end-line="0" selection-end-column="1" />
           <folding>
-            <element signature="e#24#39#0" expanded="true" />
+            <element signature="e#24#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -603,7 +602,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#24#39#0" expanded="true" />
+            <element signature="e#24#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -637,7 +636,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#24#39#0" expanded="true" />
+            <element signature="e#24#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -671,7 +670,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#24#39#0" expanded="true" />
+            <element signature="e#24#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -758,18 +757,18 @@
     <entry file="file://$PROJECT_DIR$/monster/test.py" />
     <entry file="file://$PROJECT_DIR$/monster/Scraper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="523">
-          <caret line="143" column="0" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
+        <state relative-caret-position="32">
+          <caret line="125" column="31" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/monster/Cleaner.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="56" column="16" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
+        <state relative-caret-position="234">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
           <folding>
-            <element signature="e#24#39#0" expanded="true" />
+            <element signature="e#24#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
