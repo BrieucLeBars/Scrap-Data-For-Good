@@ -118,24 +118,24 @@ def gen_small_output(title, location, company, date, thread):
 
     thread.join()
     new_json = {}
-    new_json['Nom du Poste'] = title.text
-    new_json['Entreprise'] = company.text
-    new_json['Date Publication'] = date
+    new_json['nom_du_poste'] = title.text
+    new_json['entreprise'] = company.text
+    new_json['date_publication'] = date
     try:
         lieu = Cleaner.arrondissement_paris(location.text, thread.posting_txt)
-        new_json['Lieu'] = lieu
+        new_json['lieu'] = lieu
     except:
         pass
 
     try:
         salaire, contrat = Cleaner.parser(thread.posting_txt)
-        new_json['Salaire'] = salaire
-        new_json['Type de Contrat'] = contrat
+        new_json['salaire'] = salaire
+        new_json['type_de_contrat'] = contrat
     except:
         pass
 
     try:
-        new_json['Tags'] = Cleaner.tags(thread.posting_txt)
+        new_json['tags'] = Cleaner.tags(thread.posting_txt)
     except:
         pass
 
@@ -214,8 +214,8 @@ if __name__ == '__main__':
         sys.exit(0)
 
     current_date = str(datetime.date.today())
-    storage_dct = {"Site d'offre d'emploi": 'monster', 'num_jobs': num_jobs,
-                   'Date de recherche': current_date, 'Recherche': job_title, 'Ville': job_location}
+    storage_dct = {"site_offre_emploi": 'monster', 'num_jobs': num_jobs,
+                   'date_de_recherche': current_date, 'recherche': job_title, 'ville': job_location}
 
     is_next = True
     while is_next:
