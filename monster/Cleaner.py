@@ -2,7 +2,7 @@
 import pytz
 import datetime
 import re
-
+import nltk
 
 def date_exacte(date_txt):
     """Regle le probleme du Publiee il y a x jours
@@ -31,27 +31,49 @@ def arrondissement_paris(location, posting_txt):
        return location
 
 def parser(posting_txt):
+    tokens = decompose(posting_txt)
     try:
         salaire = re.search(r'salaire \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
     except:
-        salaire = None
-        pass
+        try:
+            i = tokens.index('salaire')
+            salaire = tokens[i : i + 10]
+        except:
+            salaire = None
+            pass
     try:
         contrat = re.search(r'type de contrat \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
     except:
-        contrat = None
-        pass
-    return salaire, contrat
+        contrat = tags(posting_txt, '../type_contrat.txt')
 
-def tags(posting_txt):
-    liste_tag = ['python', 'java,', 'java ', 'javascript', 'front-end', 'back-end', 'angular', 'node',
-                 'mongodb', 'sql', 'backbone', 'express', 'jee', 'j2ee', 'api rest', 'webservice rest',
-                 'react']
-    liste_competence = []
-    for tag in liste_tag:
+    try:
+        niveau = re.search(r'niveau de poste \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+    except:
         try:
-            liste_competence.append(re.search(tag, posting_txt.lower()).group(0))
+            i = tokens.index('expérience')
+            niveau = tokens[i : i + 10]
         except:
-            pass
+            niveau = None
+    return salaire, contrat, niveau
+
+def tags(posting_txt, file):
+    with open(file, 'r') as f:
+        content = f.readlines()
+
+    liste_tag= []
+    for line in content:
+        tokens = decompose(line)
+        liste_tag += tokens
+    liste_competence = []
+    offer_content = decompose(posting_txt)
+    for tag in liste_tag:
+        if tag in offer_content:
+            liste_competence.append(tag)
     return liste_competence
+
+
+def decompose(content):
+    tokens = nltk.word_tokenize(content)
+    tokens = [item.lower() for item in tokens]
+    return tokens
 

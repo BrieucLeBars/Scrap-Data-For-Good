@@ -1,0 +1,20 @@
+python
+java
+javascript
+front-end
+frontend
+front
+back-end
+backend
+back
+angular
+node
+mongodb
+sql
+backbone
+express
+jee
+j2ee
+api rest
+webservice rest
+react

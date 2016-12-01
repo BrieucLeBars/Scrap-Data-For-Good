@@ -26,6 +26,8 @@ from general_utilities.parsing_utilities import parse_num
 from general_utilities.threading_utilities import HrefQueryThread
 import json
 import Cleaner
+import redis
+import sort_result as sort
 
 def scrape_job_page(driver, job_title, job_location):
     """Scrape a page of jobs from Monster.
@@ -57,12 +59,12 @@ def scrape_job_page(driver, job_title, job_location):
             thread = HrefQueryThread('')
         thread_lst.append(thread)
         thread.start()
-    for title, location, company, date, thread in \
-            zip(titles, locations, companies, dates, thread_lst):
+    for title, location, company, date, thread, href in \
+            zip(titles, locations, companies, dates, thread_lst, hrefs):
         date_txt = Cleaner.date_exacte(date.text)
 
         try:
-            small_dict = gen_small_output(title, location, company, date_txt, thread)
+            small_dict = gen_small_output(title, location, company, date_txt, thread, href)
         except:
             print('Missed element in Monster!')
 
@@ -99,7 +101,7 @@ def query_for_data(driver):
 
 
 
-def gen_small_output(title, location, company, date, thread):
+def gen_small_output(title, location, company, date, thread, href):
     """Format the output dictionary .
 
     Args:
@@ -121,6 +123,7 @@ def gen_small_output(title, location, company, date, thread):
     new_json['nom_du_poste'] = title.text
     new_json['entreprise'] = company.text
     new_json['date_publication'] = date
+    new_json['lien'] = str(href.get_attribute('href'))
     try:
         lieu = Cleaner.arrondissement_paris(location.text, thread.posting_txt)
         new_json['lieu'] = lieu
@@ -128,15 +131,17 @@ def gen_small_output(title, location, company, date, thread):
         pass
 
     try:
-        salaire, contrat = Cleaner.parser(thread.posting_txt)
+        salaire, contrat, niveau = Cleaner.parser(thread.posting_txt)
         new_json['salaire'] = salaire
         new_json['type_de_contrat'] = contrat
+        new_json['niveau_de_poste'] = niveau
     except:
         pass
 
     try:
-        new_json['tags'] = Cleaner.tags(thread.posting_txt)
+        new_json['tags'] = Cleaner.tags(thread.posting_txt, '../competences.txt')
     except:
+        print('problem')
         pass
 
     return new_json
@@ -222,6 +227,13 @@ if __name__ == '__main__':
         scrape_job_page(driver, job_title, job_location)
         is_next = check_if_next(driver)
     driver.close()
+    job_list = sort.tri_resultat(job_list)
     storage_dct['jobs'] = job_list
     with open('test2.json', 'w') as data_file:
         json.dump(storage_dct, data_file)
+
+    base_de_jobs = redis.StrictRedis(host='localhost', port=6379, db=0)
+    compteur = 0
+    for element in job_list:
+        base_de_jobs.set(str(compteur), element)
+        compteur += 1
