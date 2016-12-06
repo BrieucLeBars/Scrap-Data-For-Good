@@ -17,6 +17,7 @@ wd = os.path.abspath('.')
 sys.path.append(wd + '/../')
 import datetime
 import pytz
+import re
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from general_utilities.storage_utilities import store_in_mongo
@@ -25,9 +26,51 @@ from general_utilities.navigation_utilities import issue_driver_query
 from general_utilities.parsing_utilities import parse_num
 from general_utilities.threading_utilities import HrefQueryThread
 import json
-import Cleaner
 
-def scrape_job_page(driver, job_title, job_location):
+
+def parser(posting_txt):
+    try:
+        salaire = re.search(r'salaire \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+    except:
+        salaire = None
+        pass
+    try:
+        contrat = re.search(r'type de contrat \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+    except:
+        contrat = None
+        pass
+    return salaire, contrat
+
+def tags(posting_txt, tags):
+    if tags == []:
+        tags = ['python', 'java,', 'java ', 'javascript', 'front-end', 'back-end', 'angular', 'node',
+                 'mongodb', 'sql', 'backbone', 'express', 'jee', 'j2ee', 'api rest', 'webservice rest',
+                 'react']
+    liste_competence = []
+    for tag in tags:
+        try:
+            liste_competence.append(re.search(tag, posting_txt.lower()).group(0))
+        except:
+            pass
+    return liste_competence
+    
+    
+def date_exacte(date_txt):
+    """Regle le probleme du Publiee il y a x jours
+    pour rendre la vraie date de publication"""
+    current_date = datetime.date.today()
+    if re.search(r"aujourd", date_txt):
+        return str(current_date)
+    elif re.search(r'il y a (.*) jour', date_txt):
+        nb_jours = re.search(r'il y a (.*) jour', date_txt)
+        new_date = current_date + datetime.timedelta(days=-int(nb_jours.group(1)))
+        return str(new_date)
+    else:
+        return date_txt    
+    
+    
+
+def scrape_job_page(driver, job_title, job_location, tags):
     """Scrape a page of jobs from Monster.
 
     Grab everything that is possible (or relevant) for each of the jobs posted
@@ -47,7 +90,7 @@ def scrape_job_page(driver, job_title, job_location):
     json_dct = {'search_title': job_title, \
                 'search_location': job_location, \
                 'search_date': current_date, 'job_site': 'monster'}
-
+    job_list = []
     thread_lst = []
     for href in hrefs:
         try:
@@ -59,17 +102,14 @@ def scrape_job_page(driver, job_title, job_location):
         thread.start()
     for title, location, company, date, thread in \
             zip(titles, locations, companies, dates, thread_lst):
-        date_txt = Cleaner.date_exacte(date.text)
+        date_txt = date_exacte(date.text)
 
         try:
-            small_dict = gen_small_output(title, location, company, date_txt, thread)
+            small_dict = gen_small_output(title, location, company, date_txt, thread, tags)
         except:
             print('Missed element in Monster!')
-
-        try:
-            job_list.append(small_dict)
-        except IOError as err:
-            print(err)
+        job_list.append(small_dict)
+    return job_list
 
 
 
@@ -97,9 +137,23 @@ def query_for_data(driver):
 
     return job_titles, job_locations, posting_companies, dates, hrefs
 
+def arrondissement_paris(location, posting_txt):
+   if re.search(r'Paris', location):
+       #chercher code postale dans posting_txt
+       try:
+           arrondissement = re.search(r'Paris 750([0-9][0-9])', posting_txt.lower()).group(1)
+           lieu = 'Paris ' + arrondissement
+           return lieu
+       except:
+           return 'Paris'
+   else:
+       return location
 
 
-def gen_small_output(title, location, company, date, thread):
+
+
+
+def gen_small_output(title, location, company, date, thread, tags):
     """Format the output dictionary .
 
     Args:
@@ -122,20 +176,22 @@ def gen_small_output(title, location, company, date, thread):
     new_json['entreprise'] = company.text
     new_json['date_publication'] = date
     try:
-        lieu = Cleaner.arrondissement_paris(location.text, thread.posting_txt)
+        lieu = arrondissement_paris(location.text, thread.posting_txt)
         new_json['lieu'] = lieu
+        new_json['lieu'] = clean_lieu(new_json['lieu'])
     except:
         pass
 
     try:
-        salaire, contrat = Cleaner.parser(thread.posting_txt)
+        salaire, contrat, niveau = parser(thread.posting_txt)
         new_json['salaire'] = salaire
         new_json['type_de_contrat'] = contrat
+        new_json['niveau_de_poste'] = niveau
     except:
         pass
 
     try:
-        new_json['tags'] = Cleaner.tags(thread.posting_txt)
+        new_json['tags'] = tags(thread.posting_txt, tags)
     except:
         pass
 
@@ -190,7 +246,7 @@ def get_num_jobs_txt(driver):
     return num_jobs_txt
 
 
-if __name__ == '__main__':
+if __name__ == '':
     try:
         job_title = sys.argv[1]
         job_location = sys.argv[2]
