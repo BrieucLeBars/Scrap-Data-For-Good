@@ -1,3 +1,13 @@
+# build_database.py
+
+Créer la base de données (ne supprime pas l'anciennce pour le moment) et la stock
+dans une base redis.
+
+# requete_par_job_title.py
+
+Permet de faire une requête dans la base de données par job_title qui a utilisé
+pour scrapper l'offre.
+
 # Web-Scrapers
 
 This repo will contain code for all of the web-scrapers I have ever built, 
