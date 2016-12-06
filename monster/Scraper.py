@@ -139,7 +139,7 @@ def gen_small_output(title, location, company, date, thread, href):
         pass
 
     try:
-        new_json['tags'] = Cleaner.tags(thread.posting_txt, '../competences.txt')
+        new_json['tags'] = Cleaner.tags(thread.posting_txt, './competences.txt')
     except:
         print('problem')
         pass
@@ -229,8 +229,6 @@ if __name__ == '__main__':
     driver.close()
     job_list = sort.tri_resultat(job_list)
     storage_dct['jobs'] = job_list
-    with open('test2.json', 'w') as data_file:
-        json.dump(storage_dct, data_file)
 
     base_de_jobs = redis.StrictRedis(host='localhost', port=6379, db=0)
     compteur = 0

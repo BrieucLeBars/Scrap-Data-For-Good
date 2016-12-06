@@ -2,7 +2,7 @@ import Cleaner
 
 def tri_resultat(job_list):
     new_job_list = []
-    with open('../experience.txt', 'r') as f:
+    with open('./experience.txt', 'r') as f:
         content = f.readlines()
 
     liste_experience= []

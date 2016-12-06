@@ -44,7 +44,7 @@ def parser(posting_txt):
     try:
         contrat = re.search(r'type de contrat \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
     except:
-        contrat = tags(posting_txt, '../type_contrat.txt')
+        contrat = tags(posting_txt, './type_contrat.txt')
 
     try:
         niveau = re.search(r'niveau de poste \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
