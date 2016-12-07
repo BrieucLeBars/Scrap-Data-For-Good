@@ -1,3 +1,15 @@
+# A faire
+
+Brieuc : cleaner le scrapper monster, mettre en place le filtre par l'expérience, automatiser le scrap quand les
+         scripts sont clean
+Lucas : harmoniser la recherche de coordonnées, cleaner le scrapper indeeed, mettre en place le filtre à l'expérience, scrapper la date de publication
+
+-> Faire l'API pour accéder aux données de la base, et notamment faire une requête qui prend en paramètre
+   un nom de job et appelle la méthode requete_par_job_title qui se trouve dans le script requete_par_job_title.py
+
+-> Regarder comment installer un serveur redis sur le serveur
+
+
 # build_database.py
 
 Créer la base de données (ne supprime pas l'anciennce pour le moment) et la stock
