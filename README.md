@@ -4,6 +4,8 @@ Brieuc : cleaner le scrapper monster, mettre en place le filtre par l'expérienc
          scripts sont clean
 Lucas : harmoniser la recherche de coordonnées, cleaner le scrapper indeeed, mettre en place le filtre à l'expérience, scrapper la date de publication
 
+Cyril : utiliser l'API google pour trouver les adresses des jobs avec le nom de l'entreprise et le nom du lieu
+
 -> Faire l'API pour accéder aux données de la base, et notamment faire une requête qui prend en paramètre
    un nom de job et appelle la méthode requete_par_job_title qui se trouve dans le script requete_par_job_title.py
 
