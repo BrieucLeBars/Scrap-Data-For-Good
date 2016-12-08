@@ -20,9 +20,7 @@ import datetime
 import pytz
 from functools import partial
 from general_utilities.query_utilities import format_query
-from general_utilities.storage_utilities import store_in_mongo
 from general_utilities.parsing_utilities import parse_num
-from request_threading import RequestInfoThread
 from redis import StrictRedis
 import cPickle
 import pandas as pd

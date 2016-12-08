@@ -20,7 +20,7 @@ import pytz
 import re
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from general_utilities.storage_utilities import store_in_mongo
+
 from general_utilities.query_utilities import get_html, format_query
 from general_utilities.navigation_utilities import issue_driver_query
 from general_utilities.parsing_utilities import parse_num

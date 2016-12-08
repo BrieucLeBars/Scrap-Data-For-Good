@@ -5,7 +5,7 @@ Created on Wed Nov 16 19:21:28 2016
 @author: Lucas Bony
 """
 
-from indeed import build_database
+
 import sys
 import json
 import redis
