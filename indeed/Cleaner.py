@@ -71,11 +71,11 @@ def load_csv(fp):
     
 def find_town(town, villes_db):
    #l'arrondissement avec parenthèses
-    m = re.match(r"Paris \(([0-9]{1,2}e)\)", town)
+    m = re.match(r"[Pp]aris \(([0-9]{1,2}e)\)", town)
     if not m is None:
         return ARRONDISSEMENTS[m.group(1)]
     #l'arrondissement sans parenthèses
-    m = re.match(r"Paris ([0-9]{1,2}e)", town)
+    m = re.match(r"[Pp]aris ([0-9]{1,2}e)", town)
     if not m is None:
         return ARRONDISSEMENTS[m.group(1)]
     for row in villes_db:
@@ -86,6 +86,15 @@ def find_town(town, villes_db):
             return {"lon" : row[19],
                     "lat" : row[20]} 
     return {}
+    
+def clean_nom_entreprise(entreprise):
+    entreprise = entreprise.replace("\n","")
+    
+    m = re.match(r'[ ]+([\w ]+)', entreprise)
+    if not m is None:
+        return m.group(1)
+    else:
+        return entreprise
 
 
 
@@ -212,7 +221,7 @@ def to_text(html):
     text = text.replace("\n", "").replace("\r","").replace("\t", "")
     return text
 
-def start_indeed(scrap_keywords, scrap_locations_w_radius, description_keywords, result_nb):
+def start_indeed(scrap_keywords, scrap_locations_w_radius, description_keywords, result_nb, types_contrat):
 
     t_start = time.time()
     current_date = str(datetime.date.today())
@@ -249,7 +258,10 @@ def start_indeed(scrap_keywords, scrap_locations_w_radius, description_keywords,
                     if not job["href"] in _hrefs:
                         _hrefs.append(job["href"])
                         #on trouve les coordonnees de la localisation
-                        job['location'] = clean_string(job['location']).lower()
+                        job['location'] = clean_town(clean_string(job['location']).lower())
+                        print job['location']
+                        if 'expérience' in job['posting_txt']:
+                            print job['posting_txt']
                         if job['location'] in villes_coor.keys():
                             #si la ville où se trouve ce job a deja ete rencontree alors on connait deja ses coordonnees et on a pas besoin
                             #de parser a nouveau le .csv avec les coordonnees des villes
@@ -269,6 +281,7 @@ def start_indeed(scrap_keywords, scrap_locations_w_radius, description_keywords,
                             niveau = ""
                         #TODO trouver les etudes et les keywords
                         #on extrait le niveau apres le bac requis pour le job si on le trouve
+                        d['lieu'] = job['location']
                         d['niveau_de_poste'] = niveau
                         d['salaire'] = salaire
                         #on extrait les keywords que l'on trouve conformement aux keywords passe en argument (description_keywords)
@@ -279,7 +292,7 @@ def start_indeed(scrap_keywords, scrap_locations_w_radius, description_keywords,
                         #le job_title utilisé pour scrapper cette offre
                         d['job_title_scrap'] = job_title
                         if 'company' in job.keys():
-                            d['entreprise'] = job['company']
+                            d['entreprise'] = clean_nom_entreprise(job['company'])
                         else:
                             d['entreprise'] = ""
                         db.append(d)

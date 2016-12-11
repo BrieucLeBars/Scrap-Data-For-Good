@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """A module for scraping Monster for jobs.
 
 This module is the driver for a Monster scraper. It controls the process of
@@ -9,7 +10,7 @@ Usage:
 
     python job_scraper.py <job title> <job location> <radius>
 """
-# -*- coding: utf-8 -*-
+
 import sys
 import os
 
@@ -26,20 +27,20 @@ from general_utilities.navigation_utilities import issue_driver_query
 from general_utilities.parsing_utilities import parse_num
 from general_utilities.threading_utilities import HrefQueryThread
 import json
+import nltk
 
-
-def parser(posting_txt):
-    try:
-        salaire = re.search(r'salaire \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
-    except:
-        salaire = None
-        pass
-    try:
-        contrat = re.search(r'type de contrat \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
-    except:
-        contrat = None
-        pass
-    return salaire, contrat
+#def parser(posting_txt):
+#    try:
+#        salaire = re.search(r'salaire \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+#    except:
+#        salaire = None
+#        pass
+#    try:
+#        contrat = re.search(r'type de contrat \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+#    except:
+#        contrat = None
+#        pass
+#    return salaire, contrat
 
 def tags(posting_txt, tags):
     if tags == []:
@@ -68,6 +69,51 @@ def date_exacte(date_txt):
     else:
         return date_txt    
     
+def tags(posting_txt, file):
+    with open(file, 'r') as f:
+        content = f.readlines()
+
+    liste_tag= []
+    for line in content:
+        tokens = decompose(line)
+        liste_tag += tokens
+    liste_competence = []
+    offer_content = decompose(posting_txt)
+    for tag in liste_tag:
+        if tag in offer_content:
+            liste_competence.append(tag)
+    return liste_competence
+    
+def decompose(content):
+    tokens = nltk.word_tokenize(content)
+    tokens = [item.lower() for item in tokens]
+    return tokens
+
+def parser(posting_txt):
+    tokens = decompose(posting_txt)
+    try:
+        salaire = re.search(r'salaire \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+    except:
+        try:
+            i = tokens.index('salaire')
+            salaire = tokens[i : i + 10]
+        except:
+            salaire = None
+            pass
+    try:
+        contrat = re.search(r'type de contrat \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+    except:
+        contrat = tags(posting_txt, '../type_contrat.txt')
+
+    try:
+        niveau = re.search(r'niveau de poste \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+    except:
+        try:
+            i = tokens.index('expérience')
+            niveau = tokens[i : i + 10]
+        except:
+            niveau = None
+    return salaire, contrat, niveau
     
 
 def scrape_job_page(driver, job_title, job_location, tags):

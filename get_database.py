@@ -7,6 +7,8 @@ Created on Wed Nov 16 19:21:28 2016
 
 
 import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 import json
 import redis
 from indeed.Cleaner import start_indeed
@@ -52,9 +54,13 @@ if __name__ == "__main__":
     scrap_job_titles = json.load(open(scrap_job_titles_fp, "rb"), encoding='latin-1')["titles"]
     scrap_locations_radius = json.load(open(scrap_locations_radius_fp, "rb"), encoding='latin-1')["locations"]
     tags = json.load(open(tags_fp, "rb"), encoding='latin-1')["tags"]
-    
-    indeed = start_indeed(scrap_job_titles, scrap_locations_radius, tags, result_nb)
-    monster = start_monster(scrap_job_titles, scrap_locations_radius, tags)
+    types_contrat = []
+    with open("type_contrat.txt", "rb") as f:
+        for line in f.readlines():
+            types_contrat.append(line)
+        f.close()
+    indeed = start_indeed(scrap_job_titles, scrap_locations_radius, tags, result_nb, types_contrat)
+    monster = start_monster(scrap_job_titles, scrap_locations_radius, tags, types_contrat)
     
     db = clean_doubles(indeed, monster)
     r = redis.StrictRedis(db=1)

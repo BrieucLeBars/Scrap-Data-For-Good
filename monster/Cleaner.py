@@ -79,51 +79,7 @@ def find_town(town, villes_db):
     return {}
     
 
-def tags(posting_txt, file):
-    with open(file, 'r') as f:
-        content = f.readlines()
 
-    liste_tag= []
-    for line in content:
-        tokens = decompose(line)
-        liste_tag += tokens
-    liste_competence = []
-    offer_content = decompose(posting_txt)
-    for tag in liste_tag:
-        if tag in offer_content:
-            liste_competence.append(tag)
-    return liste_competence
-    
-def decompose(content):
-    tokens = nltk.word_tokenize(content)
-    tokens = [item.lower() for item in tokens]
-    return tokens
-
-def parser(posting_txt):
-    tokens = decompose(posting_txt)
-    try:
-        salaire = re.search(r'salaire \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
-    except:
-        try:
-            i = tokens.index('salaire')
-            salaire = tokens[i : i + 10]
-        except:
-            salaire = None
-            pass
-    try:
-        contrat = re.search(r'type de contrat \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
-    except:
-        contrat = tags(posting_txt, '../type_contrat.txt')
-
-    try:
-        niveau = re.search(r'niveau de poste \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
-    except:
-        try:
-            i = tokens.index('expérience')
-            niveau = tokens[i : i + 10]
-        except:
-            niveau = None
-    return salaire, contrat, niveau
 
 
 
@@ -158,7 +114,7 @@ def scrap(job_title, job_location, radius, tags):
         d['lieu'] = clean_lieu(d)
     return job_list
     
-def start_monster(scrap_keywords, scrap_locations_w_radius, tags):
+def start_monster(scrap_keywords, scrap_locations_w_radius, tags, types_contrat):
 
     t_start = time.time()
     current_date = str(datetime.date.today())
@@ -235,4 +191,8 @@ def start_monster(scrap_keywords, scrap_locations_w_radius, tags):
     return db
                 #faire un script qui permet de sortir seulement les coordonnees
 
-
+def compte_coor(db):
+    cnt = 0
+    for d in db:
+        cnt +=  d["coordonnees"] != {}
+    return cnt
