@@ -1,7 +1,7 @@
 # A faire
 
-Brieuc : cleaner le scrapper monster, mettre en place le filtre par l'expérience, automatiser le scrap quand les
-         scripts sont clean
+Brieuc : Reste à filtrer les résultats
+
 Lucas : harmoniser la recherche de coordonnées, cleaner le scrapper indeeed, mettre en place le filtre à l'expérience, scrapper la date de publication
 
 Cyril : utiliser l'API google pour trouver les adresses des jobs avec le nom de l'entreprise et le nom du lieu
@@ -22,18 +22,9 @@ dans une base redis.
 Permet de faire une requête dans la base de données par job_title qui a utilisé
 pour scrapper l'offre.
 
-# Web-Scrapers
+# automatisation.py
 
-This repo will contain code for all of the web-scrapers I have ever built, 
-with the idea that maybe this will save work for somebody else building a 
-scraper for the same site, or a similar site. 
-
-In terms of the way this is structured, for the time being I am planning on 
-putting scrapers for different websites (defined by the domain named) into 
-different folders. Depending on the length of the domain name, I will do my 
-best to give each folder name the domain name. In any case, within the READMEs
-for each folder, I will give the URL to the homepage along with a description
-of how to use the scraper in that folder.  
+Automatise le scrap toutes les heures 
 
 ## Notes
 
