@@ -6,7 +6,7 @@ Created on Sun Nov 20 17:40:58 2016
 """
 
 import sys
-import pandas as pd
+#import pandas as pd
 import re
 import csv
 import json
@@ -15,7 +15,7 @@ import nltk
 from bs4 import BeautifulSoup
 import datetime
 
-from Scraper import scrap
+from indeed.Scraper import scrap
 #TODO créer un fichier pour gérer les noms qui ne sont pas des communes (La Défense, Montparnasse, République...)
 
 #%%
@@ -63,7 +63,7 @@ def clean_string(s):
     return s    
     
 def load_csv(fp):
-    f = csv.reader(open(fp, "rb"), delimiter=",")
+    f = csv.reader(open(fp, "r"), delimiter=",")
     _db = []    
     for row in f:
         _db.append(row)
@@ -244,7 +244,7 @@ def start_indeed(scrap_keywords, scrap_locations_w_radius, description_keywords,
         t_intermediate = time.time()
         
         for job_location in scrap_locations_w_radius:
-            print "Scrapping with : %s, around %s with a radius of %d" % (job_title, job_location['name'], job_location['radius'])
+            print("Scrapping with : %s, around %s with a radius of %d" % (job_title, job_location['name'], job_location['radius']))
             jobs = scrap(job_title, job_location['name'], job_location['radius'], result_nb)
             #on parse les jobs que l'on a obtenu pour les cleaner
             job_cnt = 0
@@ -259,9 +259,9 @@ def start_indeed(scrap_keywords, scrap_locations_w_radius, description_keywords,
                         _hrefs.append(job["href"])
                         #on trouve les coordonnees de la localisation
                         job['location'] = clean_town(clean_string(job['location']).lower())
-                        print job['location']
+                        print(job['location'])
                         if 'expérience' in job['posting_txt']:
-                            print job['posting_txt']
+                            print(job['posting_txt'])
                         if job['location'] in villes_coor.keys():
                             #si la ville où se trouve ce job a deja ete rencontree alors on connait deja ses coordonnees et on a pas besoin
                             #de parser a nouveau le .csv avec les coordonnees des villes

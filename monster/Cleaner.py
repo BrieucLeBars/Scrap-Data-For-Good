@@ -8,10 +8,10 @@ import json
 import csv
 import time
 import nltk
-reload(sys)
-sys.setdefaultencoding('utf-8')
+#reload(sys)
+#sys.setdefaultencoding('utf-8')
 
-from Scraper import scrape_job_page, query_for_data, gen_small_output, check_if_next, get_num_jobs_txt
+from monster.Scraper import scrape_job_page, query_for_data, gen_small_output, check_if_next, get_num_jobs_txt
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -47,18 +47,18 @@ ARRONDISSEMENTS = {
 
 
 def load_csv(fp):
-    f = csv.reader(open(fp, "rb"), delimiter=",")
+    f = csv.reader(open(fp, "r"), delimiter=",")
     _db = []    
     for row in f:
         _db.append(row)
     return _db
     
-
 def clean_lieu(d):
     try:
         return re.search("([^,]+), \\w+", d['lieu'].lower()).group(1)
     except AttributeError:
         return d['lieu']
+
         
 def find_town(town, villes_db):
    #l'arrondissement avec parenthèses
@@ -83,16 +83,16 @@ def find_town(town, villes_db):
 
 
 
-def scrap(job_title, job_location, radius, tags):
-    if os.environ['OS'][0:7] == 'Windows':
-        os.environ['USER'] = 'Windows'
-        
+def scrap(job_title, job_location, radius, tags, types_contrat):
+    #if os.environ['OS'][0:7] == 'Windows':
+
     base_URL = 'http://monster.fr/emploi/recherche/?'
     query_parameters = ['q={}'.format('-'.join(job_title.split())),
                         '&where={}'.format('-'.join(job_location.split())), '&sort=dt.rv.di',
                         '&rad={}'.format(radius)]
 
     query_URL = format_query(base_URL, query_parameters)
+    print(query_URL)
     driver = issue_driver_query(query_URL)
     job_list = []
     try:
@@ -107,7 +107,7 @@ def scrap(job_title, job_location, radius, tags):
 
     is_next = True
     while is_next:
-        job_list.extend(scrape_job_page(driver, job_title, job_location, tags))
+        job_list.extend(scrape_job_page(driver, job_title, job_location, tags, types_contrat))
         is_next = check_if_next(driver)
     driver.close()
     for d in job_list:
@@ -137,8 +137,8 @@ def start_monster(scrap_keywords, scrap_locations_w_radius, tags, types_contrat)
         t_intermediate = time.time()
         
         for job_location in scrap_locations_w_radius:
-            print "Scrapping with : %s, around %s with a radius of %d" % (job_title, job_location['name'], job_location['radius'])
-            jobs = scrap(job_title, job_location['name'], job_location['radius'], tags)
+            print("Scrapping with : %s, around %s with a radius of %d" % (job_title, job_location['name'], job_location['radius']))
+            jobs = scrap(job_title, job_location['name'], job_location['radius'], tags, types_contrat)
             #on parse les jobs que l'on a obtenu pour les cleaner
 #            job_cnt = 0
 #            print("    Processing %d jobs" % (len(jobs)))

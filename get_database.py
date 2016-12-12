@@ -7,8 +7,7 @@ Created on Wed Nov 16 19:21:28 2016
 
 
 import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
+
 import json
 import redis
 from indeed.Cleaner import start_indeed
@@ -27,10 +26,10 @@ def clean_doubles(db_a, db_b):
         is_double = False
         for d_a in db:
             if (d_a["nom_du_poste"] == d_b["nom_du_poste"] and d_a["entreprise"] == d_b["entreprise"]):
-                print d_a["nom_du_poste"]
-                print d_a["entreprise"]
-                print d_b["nom_du_poste"]
-                print d_b["entreprise"]
+                print(d_a["nom_du_poste"])
+                print(d_a["entreprise"])
+                print(d_b["nom_du_poste"])
+                print(d_b["entreprise"])
                 is_double = True
         if not is_double: 
             db.append(d_b)
@@ -51,13 +50,13 @@ if __name__ == "__main__":
         tags_fp = "tags"
         result_nb = 220
     
-    scrap_job_titles = json.load(open(scrap_job_titles_fp, "rb"), encoding='latin-1')["titles"]
-    scrap_locations_radius = json.load(open(scrap_locations_radius_fp, "rb"), encoding='latin-1')["locations"]
-    tags = json.load(open(tags_fp, "rb"), encoding='latin-1')["tags"]
+    scrap_job_titles = json.load(open(scrap_job_titles_fp, "r"), encoding='latin-1')["titles"]
+    scrap_locations_radius = json.load(open(scrap_locations_radius_fp, "r"), encoding='latin-1')["locations"]
+    tags = json.load(open(tags_fp, "r"), encoding='latin-1')["tags"]
     types_contrat = []
-    with open("type_contrat.txt", "rb") as f:
+    with open("type_contrat.txt", "r") as f:
         for line in f.readlines():
-            types_contrat.append(line)
+            types_contrat.append(line[:-1])
         f.close()
     indeed = start_indeed(scrap_job_titles, scrap_locations_radius, tags, result_nb, types_contrat)
     monster = start_monster(scrap_job_titles, scrap_locations_radius, tags, types_contrat)

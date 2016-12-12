@@ -2,3 +2,10 @@ CDI
 CDD
 Stage
 Alternance
+Missions
+Temps plein
+handinamic
+freelance
+saisonnier
+indépendant
+franchise

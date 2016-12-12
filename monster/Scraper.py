@@ -29,33 +29,7 @@ from general_utilities.threading_utilities import HrefQueryThread
 import json
 import nltk
 
-#def parser(posting_txt):
-#    try:
-#        salaire = re.search(r'salaire \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
-#    except:
-#        salaire = None
-#        pass
-#    try:
-#        contrat = re.search(r'type de contrat \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
-#    except:
-#        contrat = None
-#        pass
-#    return salaire, contrat
 
-def tags(posting_txt, tags):
-    if tags == []:
-        tags = ['python', 'java,', 'java ', 'javascript', 'front-end', 'back-end', 'angular', 'node',
-                 'mongodb', 'sql', 'backbone', 'express', 'jee', 'j2ee', 'api rest', 'webservice rest',
-                 'react']
-    liste_competence = []
-    for tag in tags:
-        try:
-            liste_competence.append(re.search(tag, posting_txt.lower()).group(0))
-        except:
-            pass
-    return liste_competence
-    
-    
 def date_exacte(date_txt):
     """Regle le probleme du Publiee il y a x jours
     pour rendre la vraie date de publication"""
@@ -68,18 +42,14 @@ def date_exacte(date_txt):
         return str(new_date)
     else:
         return date_txt    
-    
-def tags(posting_txt, file):
-    with open(file, 'r') as f:
-        content = f.readlines()
 
-    liste_tag= []
-    for line in content:
-        tokens = decompose(line)
-        liste_tag += tokens
+
+
+def tags(posting_txt, tag_list):
+    tag_list = [item.lower() for item in tag_list]
     liste_competence = []
     offer_content = decompose(posting_txt)
-    for tag in liste_tag:
+    for tag in tag_list:
         if tag in offer_content:
             liste_competence.append(tag)
     return liste_competence
@@ -89,7 +59,7 @@ def decompose(content):
     tokens = [item.lower() for item in tokens]
     return tokens
 
-def parser(posting_txt):
+def parser(posting_txt, types_contrat):
     tokens = decompose(posting_txt)
     try:
         salaire = re.search(r'salaire \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
@@ -101,9 +71,13 @@ def parser(posting_txt):
             salaire = None
             pass
     try:
-        contrat = re.search(r'type de contrat \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+        recherche = re.search(r'type de contrat \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
+        contrat = tags(recherche, types_contrat)
     except:
-        contrat = tags(posting_txt, '../type_contrat.txt')
+        try:
+            contrat = tags(posting_txt, types_contrat)
+        except:
+            contrat = None
 
     try:
         niveau = re.search(r'niveau de poste \n (.*) \n \n \n \n \n', posting_txt.lower()).group(1)
@@ -116,7 +90,7 @@ def parser(posting_txt):
     return salaire, contrat, niveau
     
 
-def scrape_job_page(driver, job_title, job_location, tags):
+def scrape_job_page(driver, job_title, job_location, tags, types_contrat):
     """Scrape a page of jobs from Monster.
 
     Grab everything that is possible (or relevant) for each of the jobs posted
@@ -149,9 +123,9 @@ def scrape_job_page(driver, job_title, job_location, tags):
     for title, location, company, date, thread in \
             zip(titles, locations, companies, dates, thread_lst):
         date_txt = date_exacte(date.text)
-
+        small_dict = []
         try:
-            small_dict = gen_small_output(title, location, company, date_txt, thread, tags)
+            small_dict = gen_small_output(title, location, company, date_txt, thread, tags, types_contrat)
         except:
             print('Missed element in Monster!')
         job_list.append(small_dict)
@@ -199,7 +173,7 @@ def arrondissement_paris(location, posting_txt):
 
 
 
-def gen_small_output(title, location, company, date, thread, tags):
+def gen_small_output(title, location, company, date, thread, tag, types_contrat):
     """Format the output dictionary .
 
     Args:
@@ -224,12 +198,11 @@ def gen_small_output(title, location, company, date, thread, tags):
     try:
         lieu = arrondissement_paris(location.text, thread.posting_txt)
         new_json['lieu'] = lieu
-        new_json['lieu'] = clean_lieu(new_json['lieu'])
     except:
         pass
 
     try:
-        salaire, contrat, niveau = parser(thread.posting_txt)
+        salaire, contrat, niveau = parser(thread.posting_txt, types_contrat)
         new_json['salaire'] = salaire
         new_json['type_de_contrat'] = contrat
         new_json['niveau_de_poste'] = niveau
@@ -237,10 +210,9 @@ def gen_small_output(title, location, company, date, thread, tags):
         pass
 
     try:
-        new_json['tags'] = tags(thread.posting_txt, tags)
+        new_json['tags'] = tags(thread.posting_txt, tag)
     except:
         pass
-
     return new_json
 
 
@@ -269,7 +241,6 @@ def check_if_next(driver):
     else:
         return False
 
-
 def get_num_jobs_txt(driver):
     """Get the number of jobs text.
 
@@ -290,40 +261,3 @@ def get_num_jobs_txt(driver):
     page_titles = driver.find_elements_by_class_name('page-title')
     num_jobs_txt = ''.join([page_title.text for page_title in page_titles])
     return num_jobs_txt
-
-
-if __name__ == '':
-    try:
-        job_title = sys.argv[1]
-        job_location = sys.argv[2]
-        radius = sys.argv[3]
-    except IndexError:
-        raise Exception('Program needs a job title, job location, and radius inputted!')
-    base_URL = 'http://monster.fr/emploi/recherche/?'
-    query_parameters = ['q={}'.format('-'.join(job_title.split())),
-                        '&where={}'.format('-'.join(job_location.split())), '&sort=dt.rv.di',
-                        '&rad={}'.format(radius)]
-
-    query_URL = format_query(base_URL, query_parameters)
-    driver = issue_driver_query(query_URL)
-    job_list = []
-    try:
-        num_jobs_txt = get_num_jobs_txt(driver)
-        num_jobs = int(parse_num(num_jobs_txt, 0))
-        print(num_jobs_txt)
-    except:
-        print('No jobs for search {} in {}'.format(job_title, job_location))
-        sys.exit(0)
-
-    current_date = str(datetime.date.today())
-    storage_dct = {"site_offre_emploi": 'monster', 'num_jobs': num_jobs,
-                   'date_de_recherche': current_date, 'recherche': job_title, 'ville': job_location}
-
-    is_next = True
-    while is_next:
-        scrape_job_page(driver, job_title, job_location)
-        is_next = check_if_next(driver)
-    driver.close()
-    storage_dct['jobs'] = job_list
-    with open('test2.json', 'w') as data_file:
-        json.dump(storage_dct, data_file)

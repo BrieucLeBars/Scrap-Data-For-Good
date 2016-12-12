@@ -8,11 +8,11 @@ Created on Sun Nov 20 17:30:38 2016
 
 
 import sys
-reload(sys)
+#reload(sys)
 import os
 wd = os.path.abspath('.')
 sys.path.append(wd + '/../')
-sys.setdefaultencoding('utf8')
+#sys.setdefaultencoding('utf8')
 
 
 import multiprocessing
@@ -22,8 +22,8 @@ from functools import partial
 from general_utilities.query_utilities import format_query
 from general_utilities.parsing_utilities import parse_num
 from redis import StrictRedis
-import cPickle
-import pandas as pd
+#import cPickle
+#import pandas as pd
 import re
 
 from threading import Thread
@@ -168,7 +168,7 @@ def get_html(url):
     ------
         soup: bs4.BeautifulSoup object
     """
-    print url
+    print(url)
     try: 
         response = requests.get(url)
         good_response = check_response_code(response)

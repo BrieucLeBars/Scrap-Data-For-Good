@@ -40,13 +40,13 @@ def issue_driver_query(query_URL, query_params=None):
     """
     
     # Allows us to run Selenium in a headless fashion (on AWS, for example). 
-    if os.environ['USER'] == 'ubuntu': 
+    if os.environ['SESSION'] == 'ubuntu':
         display = Display(visible=0, size=(800, 600))
         display.start()
         driver = webdriver.Chrome('/usr/local/lib/python2.7/dist-packages/selenium/webdriver/chrome/chromedriver')
     
-    if os.environ['OS'][0:7] == 'Windows':
-        driver = webdriver.Chrome('C:\Users\Lucas Bony\Downloads\chromedriver_win32\chromedriver.exe')
+    #if os.environ['OS'][0:7] == 'Windows':
+    #    driver = webdriver.Chrome('C:\Users\Lucas Bony\Downloads\chromedriver_win32\chromedriver.exe')
     # Wait long enough for page rendering before searching for an element. 
     driver.implicitly_wait(10)
     driver.get(query_URL)
