@@ -34,6 +34,16 @@ def clean_doubles(db_a, db_b):
         if not is_double: 
             db.append(d_b)
     return db
+
+def sort_high_profile(db):
+    """Tri des offres de la liste où de l'expérience professionnelle est demandée"""
+    keywords = ['expérience', 'senior', 'confirmé']
+    for job in db:
+        for word in keywords:
+            if job['niveau_de_poste'] is not None and word in job['niveau_de_poste']:
+                db.remove(job)
+    return db
+
 #%%
 if __name__ == "__main__":
     
@@ -62,6 +72,9 @@ if __name__ == "__main__":
     monster = start_monster(scrap_job_titles, scrap_locations_radius, tags, types_contrat)
     
     db = clean_doubles(indeed, monster)
+
+    db = sort_high_profile(db)
+
     r = redis.StrictRedis(db=1)
     for cnt, offre in enumerate(db):
         r.set(str(cnt), offre)
