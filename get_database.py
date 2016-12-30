@@ -7,7 +7,7 @@ Created on Wed Nov 16 19:21:28 2016
 
 
 import sys
-
+import ast
 import json
 import redis
 from indeed.Cleaner import start_indeed
@@ -40,7 +40,7 @@ def sort_high_profile(db):
     keywords = ['expérience', 'senior', 'confirmé']
     for job in db:
         for word in keywords:
-            if job['niveau_de_poste'] is not None and word in job['niveau_de_poste']:
+            if 'niveau_de_poste' in job.keys() and job['niveau_de_poste'] is not None and word in job['niveau_de_poste']:
                 db.remove(job)
     return db
 
@@ -53,12 +53,12 @@ if __name__ == "__main__":
         scrap_job_titles_fp = sys.argv[1]
         scrap_locations_radius_fp = sys.argv[2]
         tags_fp = sys.argv[3]
-        result_nb = 1100
+        result_nb = 100
     else:
         scrap_job_titles_fp = "job_titles"
         scrap_locations_radius_fp = "scrap_locations"
         tags_fp = "tags"
-        result_nb = 220
+        result_nb = 20
     
     scrap_job_titles = json.load(open(scrap_job_titles_fp, "r"), encoding='latin-1')["titles"]
     scrap_locations_radius = json.load(open(scrap_locations_radius_fp, "r"), encoding='latin-1')["locations"]
@@ -69,12 +69,15 @@ if __name__ == "__main__":
             types_contrat.append(line[:-1])
         f.close()
     indeed = start_indeed(scrap_job_titles, scrap_locations_radius, tags, result_nb, types_contrat)
-    monster = start_monster(scrap_job_titles, scrap_locations_radius, tags, types_contrat)
+    #monster = start_monster(scrap_job_titles, scrap_locations_radius, tags, types_contrat)
     
-    db = clean_doubles(indeed, monster)
+    db = clean_doubles(indeed, indeed)
 
     db = sort_high_profile(db)
 
-    r = redis.StrictRedis(db=1)
-    for cnt, offre in enumerate(db):
-        r.set(str(cnt), offre)
+    print((db))
+    r = redis.StrictRedis()
+    val = json.dumps(db)
+    print(len(val))
+    r.hset("developpeur", "Paris", val)
+    

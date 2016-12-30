@@ -43,7 +43,7 @@ def issue_driver_query(query_URL, query_params=None):
     if os.environ['SESSION'] == 'ubuntu':
         display = Display(visible=0, size=(800, 600))
         display.start()
-        driver = webdriver.Chrome('/usr/local/lib/python2.7/dist-packages/selenium/webdriver/chrome/chromedriver')
+        driver = webdriver.Chrome('/home/ubuntu/chromedriver')
     
     #if os.environ['OS'][0:7] == 'Windows':
     #    driver = webdriver.Chrome('C:\Users\Lucas Bony\Downloads\chromedriver_win32\chromedriver.exe')

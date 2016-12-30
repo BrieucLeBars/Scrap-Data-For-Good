@@ -3,7 +3,7 @@
 This module currently provides a couple of helper functions for storing scraping results in mongo. Only one is meant to be called directly - `store_in_mongo`. 
 """
 
-from pymongo import MongoClient
+#from pymongo import MongoClient
 
 def store_in_mongo(lst_of_dcts, db_name, collection_name, key=None): 
     """Store the list of dictionaries in Mongo. 
