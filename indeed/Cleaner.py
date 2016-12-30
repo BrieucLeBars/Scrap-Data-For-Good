@@ -259,9 +259,9 @@ def start_indeed(scrap_keywords, scrap_locations_w_radius, description_keywords,
                         _hrefs.append(job["href"])
                         #on trouve les coordonnees de la localisation
                         job['location'] = clean_town(clean_string(job['location']).lower())
-                        print(job['location'])
+                        #print(job['location'])
                         if 'expérience' in job['posting_txt']:
-                            print(job['posting_txt'])
+                            #print(job['posting_txt'])
                         if job['location'] in villes_coor.keys():
                             #si la ville où se trouve ce job a deja ete rencontree alors on connait deja ses coordonnees et on a pas besoin
                             #de parser a nouveau le .csv avec les coordonnees des villes
@@ -296,7 +296,7 @@ def start_indeed(scrap_keywords, scrap_locations_w_radius, description_keywords,
                         else:
                             d['entreprise'] = ""
                         db.append(d)
-            print("Scrap de %s a %s dans un rayon %d fait en %f secondes" % (job_title, job_location["name"], job_location["radius"], (time.time() - t_intermediate)))
+            #print("Scrap de %s a %s dans un rayon %d fait en %f secondes" % (job_title, job_location["name"], job_location["radius"], (time.time() - t_intermediate)))
                 #TODO faire un dump de la base
     print("Base cree en %f secondes" % ((time.time() - t_start)))
     output_db_name = "".join(["JOB-db-", str(len(db)), "_samples-", str(time.time())])

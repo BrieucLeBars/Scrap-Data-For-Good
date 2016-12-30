@@ -92,13 +92,13 @@ def scrap(job_title, job_location, radius, tags, types_contrat):
                         '&rad={}'.format(radius)]
 
     query_URL = format_query(base_URL, query_parameters)
-    print(query_URL)
+    #print(query_URL)
     driver = issue_driver_query(query_URL)
     job_list = []
     try:
         num_jobs_txt = get_num_jobs_txt(driver)
         num_jobs = int(parse_num(num_jobs_txt, 0))
-        print(num_jobs_txt)
+        #print(num_jobs_txt)
     except:
         print('No jobs for search {} in {}'.format(job_title, job_location))
         sys.exit(0)
