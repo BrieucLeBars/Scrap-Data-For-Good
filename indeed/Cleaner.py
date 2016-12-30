@@ -260,8 +260,6 @@ def start_indeed(scrap_keywords, scrap_locations_w_radius, description_keywords,
                         #on trouve les coordonnees de la localisation
                         job['location'] = clean_town(clean_string(job['location']).lower())
                         #print(job['location'])
-                        if 'expérience' in job['posting_txt']:
-                            #print(job['posting_txt'])
                         if job['location'] in villes_coor.keys():
                             #si la ville où se trouve ce job a deja ete rencontree alors on connait deja ses coordonnees et on a pas besoin
                             #de parser a nouveau le .csv avec les coordonnees des villes
