@@ -26,10 +26,10 @@ def clean_doubles(db_a, db_b):
         is_double = False
         for d_a in db:
             if (d_a["nom_du_poste"] == d_b["nom_du_poste"] and d_a["entreprise"] == d_b["entreprise"]):
-                print(d_a["nom_du_poste"])
-                print(d_a["entreprise"])
-                print(d_b["nom_du_poste"])
-                print(d_b["entreprise"])
+                #print(d_a["nom_du_poste"])
+                #print(d_a["entreprise"])
+                #print(d_b["nom_du_poste"])
+                #print(d_b["entreprise"])
                 is_double = True
         if not is_double: 
             db.append(d_b)
@@ -71,13 +71,12 @@ if __name__ == "__main__":
     indeed = start_indeed(scrap_job_titles, scrap_locations_radius, tags, result_nb, types_contrat)
     monster = start_monster(scrap_job_titles, scrap_locations_radius, tags, types_contrat)
     
-    db = clean_doubles(indeed, indeed)
+    db = clean_doubles(indeed, monster)
 
     db = sort_high_profile(db)
 
     print(len(db))
     r = redis.StrictRedis()
     val = json.dumps(db)
-    print(len(val))
     r.hset("developpeur", "Paris", val)
     
