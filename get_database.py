@@ -58,7 +58,7 @@ if __name__ == "__main__":
         scrap_job_titles_fp = "job_titles"
         scrap_locations_radius_fp = "scrap_locations"
         tags_fp = "tags"
-        result_nb = 20
+        result_nb = 200
     
     scrap_job_titles = json.load(open(scrap_job_titles_fp, "r"), encoding='latin-1')["titles"]
     scrap_locations_radius = json.load(open(scrap_locations_radius_fp, "r"), encoding='latin-1')["locations"]
@@ -69,13 +69,13 @@ if __name__ == "__main__":
             types_contrat.append(line[:-1])
         f.close()
     indeed = start_indeed(scrap_job_titles, scrap_locations_radius, tags, result_nb, types_contrat)
-    #monster = start_monster(scrap_job_titles, scrap_locations_radius, tags, types_contrat)
+    monster = start_monster(scrap_job_titles, scrap_locations_radius, tags, types_contrat)
     
     db = clean_doubles(indeed, indeed)
 
     db = sort_high_profile(db)
 
-    print((db))
+    print(len(db))
     r = redis.StrictRedis()
     val = json.dumps(db)
     print(len(val))
