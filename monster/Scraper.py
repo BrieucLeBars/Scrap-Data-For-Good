@@ -195,6 +195,7 @@ def gen_small_output(title, location, company, date, thread, tag, types_contrat)
     new_json['nom_du_poste'] = title.text
     new_json['entreprise'] = company.text
     new_json['date_publication'] = date
+    new_json['href'] = thread.href
     try:
         lieu = arrondissement_paris(location.text, thread.posting_txt)
         new_json['lieu'] = lieu
@@ -206,6 +207,7 @@ def gen_small_output(title, location, company, date, thread, tag, types_contrat)
         new_json['salaire'] = salaire
         new_json['type_de_contrat'] = contrat
         new_json['niveau_de_poste'] = niveau
+        new_json['href'] = ""
     except:
         pass
 

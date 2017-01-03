@@ -40,7 +40,7 @@ def issue_driver_query(query_URL, query_params=None):
     """
     
     # Allows us to run Selenium in a headless fashion (on AWS, for example). 
-    if os.environ['SESSION'] == 'ubuntu':
+    if True: #os.environ['SESSION'] == 'ubuntu':
         display = Display(visible=0, size=(800, 600))
         display.start()
         driver = webdriver.Chrome('/home/ubuntu/chromedriver')

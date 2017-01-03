@@ -287,6 +287,7 @@ def start_indeed(scrap_keywords, scrap_locations_w_radius, description_keywords,
                         d['nom_du_poste'] = job['job_title']
                         d['type_de_contrat'] = contrat
                         d['date_publication'] = ""
+                        d['href'] = job["href"]
                         #le job_title utilisé pour scrapper cette offre
                         d['job_title_scrap'] = job_title
                         if 'company' in job.keys():
